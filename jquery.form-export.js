@@ -1,4 +1,4 @@
-(function(){
+(function () {
     /**
      * @author : Maamar Yacine MEDDAH
      */
@@ -8,38 +8,41 @@
     $.fn.extend({
         exportForm: function (options) {
             var fields = $(this).serializeArray() || [];
+            var container = this;
             $.each($(this).serializeArray(), function (i, field) {
                 values[field.name] = field.value;
                 keys.push(field.name);
             });
             switch (options.format) {
                 case 'csv' : {
-                    exportToCsv(options, keys, "structure_" + $(this).attr('id'));
+                    exportToCsv(options, keys, "structure_" + $(this).attr('id'), container);
                     break;
                 }
                 case 'json' : {
-                    exportToJson(keys, "structure_" + $(this).attr('id'));
+                    exportToJson(options, keys, "structure_" + $(this).attr('id'), container);
                     break;
                 }
                 default : {
-                    exportToCsv(options, keys, "structure_" + $(this).attr('id'));
+                    exportToCsv(options, keys, "structure_" + $(this).attr('id'), container);
                 }
             }
         }
     });
-    /**
-     * Exports Javascript Object/Data to a JSON file
-     * @param data
-     * @param filename
-     */
-    function exportToJson(data, filename) {
+    function exportToJson(options, data, filename, container) {
         var json = JSON.stringify(data);
         var blob = new Blob([json], {type: "application/json"});
         var url = URL.createObjectURL(blob);
-        var a = document.getElementById('export');
-        a.download = filename + ".json";
-        a.href = url;
-        a.click();
+        var jsonStructureLink = "";
+        if (options.link === false || options.link === "") {
+            jsonStructureLink = "";
+
+        } else if (options.link === undefined || options.link === null) {
+            jsonStructureLink = "<a href='" + url + "' class='btn btn-default' download='" + filename + ".json'>Export Form Structure as Json</a>";
+        } else {
+            jsonStructureLink = "<a href='" + url + "' class='" + options.link.style + "' download='" + filename + ".json'>" + options.link.content + "</a>";
+        }
+        var htmlContainer = options.container || container;
+        $(jsonStructureLink).insertAfter(htmlContainer);
     }
 
     /**
