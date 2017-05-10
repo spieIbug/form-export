@@ -1,0 +1,33 @@
+{
+  "name": "form-export",
+  "version": "1.0.0",
+  "description": "A jquery plugin for forms data/structure export as csv/json",
+  "main": "index.js",
+  "dependencies": {
+    "jquery": "^3.2.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/meyacine/form-export.git"
+  },
+  "keywords": [
+    "jquery",
+    "form",
+    "data",
+    "structure",
+    "export",
+    "json",
+    "csv",
+    "inputs"
+  ],
+  "author": "Maamar Yacine MEDDAH <my.meddah@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/meyacine/form-export/issues"
+  },
+  "homepage": "https://github.com/meyacine/form-export#readme"
+}
