@@ -4,14 +4,14 @@
      */
     'use strict';
     var fields = [];
-    var values = {};
+    var values = [];
     var keys = [];
     $.fn.extend({
         exportForm: function (options) {
             fields = $(this).serializeArray() || [];
             var container = this;
             $.each($(this).serializeArray(), function (i, field) {
-                values[field.name] = field.value;
+                values.push = (field.value);
                 keys.push(field.name);
             });
             switch (options.format) {
@@ -36,17 +36,16 @@
         var json = JSON.stringify(data);
         var blob = new Blob([json], {type: "application/json"});
         var url = URL.createObjectURL(blob);
-        var jsonStructureLink = "";
+        var alink = "";
         if (options.link === false || options.link === "") {
-            jsonStructureLink = "";
-
+            alink = "";
         } else if (options.link === undefined || options.link === null) {
-            jsonStructureLink = "<a href='" + url + "' class='btn btn-default' download='" + filename + ".json'>Export Form Structure as Json</a>";
+            alink = "<a href='" + url + "' class='btn btn-default' download='" + filename + ".json'>Export Form as Json</a>";
         } else {
-            jsonStructureLink = "<a href='" + url + "' class='" + options.link.style + "' download='" + filename + ".json'>" + options.link.content + "</a>";
+            alink = "<a href='" + url + "' class='" + options.link.style + "' download='" + filename + ".json'>" + options.link.content + "</a>";
         }
         var htmlContainer = options.container || container;
-        $(jsonStructureLink).insertAfter(htmlContainer);
+        $(alink).insertAfter(htmlContainer);
     }
 
     /**
@@ -55,15 +54,23 @@
      * @param array
      * @param filename
      */
-    function exportToCsv(options, array, filename) {
+    function exportToCsv(options, array, filename, container) {
         var separator = options.separator || ',';
         var csvStructure = array.join(separator + " ");
         var csvFile = new Blob([csvStructure], {type: 'text/csv'});
-        var a = document.createElement('a');
-        a.download = filename + ".csv";
-        a.href = window.URL.createObjectURL(csvFile);
-        a.click();
+        var url = URL.createObjectURL(csvFile);
+        var alink = "";
+        if (options.link === false || options.link === "") {
+            alink = "";
+        } else if (options.link === undefined || options.link === null) {
+            alink = "<a href='" + url + "' class='btn btn-default' download='" + filename + ".csv'>Export Form as csv</a>";
+        } else {
+            alink = "<a href='" + url + "' class='" + options.link.style + "' download='" + filename + ".csv'>" + options.link.content + "</a>";
+        }
+        var htmlContainer = options.container || container;
+        $(alink).insertAfter(htmlContainer);
     }
+
     function getDataToExport(options) {
         var dataToExport = {};
         switch (options.exports) {
