@@ -3,11 +3,12 @@
      * @author : Maamar Yacine MEDDAH
      */
     'use strict';
+    var fields = [];
     var values = {};
     var keys = [];
     $.fn.extend({
         exportForm: function (options) {
-            var fields = $(this).serializeArray() || [];
+            fields = $(this).serializeArray() || [];
             var container = this;
             $.each($(this).serializeArray(), function (i, field) {
                 values[field.name] = field.value;
@@ -15,15 +16,18 @@
             });
             switch (options.format) {
                 case 'csv' : {
-                    exportToCsv(options, keys, "structure_" + $(this).attr('id'), container);
+                    var dataToExport = getDataToExport(options);
+                    exportToCsv(options, dataToExport, "structure_" + $(this).attr('id'), container);
                     break;
                 }
                 case 'json' : {
-                    exportToJson(options, keys, "structure_" + $(this).attr('id'), container);
+                    var dataToExport = getDataToExport(options);
+                    exportToJson(options, dataToExport, "structure_" + $(this).attr('id'), container);
                     break;
                 }
                 default : {
-                    exportToCsv(options, keys, "structure_" + $(this).attr('id'), container);
+                    var dataToExport = getDataToExport(options);
+                    exportToCsv(options, dataToExport, "structure_" + $(this).attr('id'), container);
                 }
             }
         }
@@ -59,5 +63,26 @@
         a.download = filename + ".csv";
         a.href = window.URL.createObjectURL(csvFile);
         a.click();
+    }
+    function getDataToExport(options) {
+        var dataToExport = {};
+        switch (options.exports) {
+            case "data" : {
+                dataToExport = values;
+                break;
+            }
+            case "structure" : {
+                dataToExport = keys;
+                break;
+            }
+            case "both" : {
+                dataToExport = fields
+                break;
+            }
+            default : {
+                dataToExport = fields;
+            }
+        }
+        return dataToExport;
     }
 })();
